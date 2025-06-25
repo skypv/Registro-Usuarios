@@ -2,32 +2,43 @@
 # Descripción: programacion orientada a objetos
 
 def ingresar_usuario(usuarios):
-    nombre = input("Ingrese Nombre de usuario:")  # Solicita el nombre del usuario
-    if nombre in usuarios:  # Verifica si el nombre ya existe como clave en el diccionario usuarios
-        print("Error: usuario ya existe.")
-        return
-    sexo = input("Ingrese sexo (F/M): ")  # Solicita el sexo
-    if sexo not in ("F", "M"):  # Verifica que el sexo sea F o M
-        print("Error: sexo inválido. Debe ser 'F' o 'M'.")
-        return
-    contraseña = input("Ingrese contraseña: ")  # Solicita la contraseña
+    while True:  # Este bucle repite todo el proceso hasta que el usuario se ingrese correctamente
+        try:
+            # Bucle para repetir hasta que el nombre de usuario sea válido y no exista
+            while True:
+                nombre = input("Ingrese Nombre de usuario:")  # Solicita el nombre del usuario
+                if nombre in usuarios:
+                    print("Error: usuario ya existe. Intente otro.")
+                    continue  # Si ya existe, vuelve a pedir el nombre
+                break  # Si es válido, sale del bucle
 
-    # Validaciones de la contraseña:
-    # len(contraseña) < 8: verifica que la contraseña tenga al menos 8 caracteres
-    # any(c.isdigit() for c in contraseña): verifica que haya al menos un número en la contraseña
-    # any(c.isalpha() for c in contraseña): verifica que haya al menos una letra en la contraseña
-    # " " in contraseña: verifica si hay espacio en blanco en la contraseña
-    if (len(contraseña) < 8 or
-            not any(c.isdigit() for c in contraseña) or
-            not any(c.isalpha() for c in contraseña) or
-            " " in contraseña):
-        print("Error: Contraseña no valida.")
-        return
+            # Bucle para repetir hasta que el sexo sea válido
+            while True:
+                sexo = input("Ingrese sexo (F/M): ")  # Solicita el sexo
+                if sexo not in ("F", "M"):
+                    print("Error: sexo inválido. Debe ser 'F' o 'M'.")
+                    continue  # Si es inválido, vuelve a pedir el sexo
+                break  # Si es válido, sale del bucle
 
-    # usuarios[nombre] = {...} agrega una nueva clave (nombre) al diccionario usuarios,
-    # y como valor le asigna otro diccionario con los datos del usuario.
-    usuarios[nombre] = {"sexo": sexo, "contraseña": contraseña}
-    print("Usuario ingresado con exito.")
+            # Bucle para repetir hasta que la contraseña sea válida
+            while True:
+                contraseña = input("Ingrese contraseña: ")  # Solicita la contraseña
+                if (len(contraseña) < 8 or
+                    not any(caracter.isdigit() for caracter in contraseña) or
+                    not any(caracter.isalpha() for caracter in contraseña) or
+                    " " in contraseña):
+                    print("Error: Contraseña no valida.")
+                    continue  # Si es inválida, vuelve a pedir la contraseña
+                break  # Si es válida, sale del bucle
+
+            # Si todo es válido, guarda el usuario y sale del bucle principal
+            usuarios[nombre] = {"sexo": sexo, "contraseña": contraseña}
+            print("Usuario ingresado con exito.")
+            break  # Sale del bucle principal y vuelve al menú
+
+        except Exception as error_general:
+            # Si ocurre un error inesperado, muestra el error y repite todo el proceso
+            print("Error inesperado al ingresar los datos:", error_general)
 
 def buscar_usuario(usuarios):
     nombre = input("Ingrese nombre de usuario a buscar: ")  # Solicita el nombre a buscar
